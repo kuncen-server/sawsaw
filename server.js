@@ -134,4 +134,35 @@ app.get("/", (req, res) => {
   res.json({ status: "LCST Saweria Server v2 ✅", donors: Storage.getTop(50).length });
 });
 
+// Test endpoint - kirim donasi palsu
+app.get("/test-webhook", async (req, res) => {
+  const fakeData = {
+    amount_raw: "10000",
+    donator_name: "TestUser",
+    message: "roblox: LCSTxUncleK"
+  };
+  
+  const Storage = require("./storage");
+  const robloxUser = "LCSTxUncleK";
+  Storage.addDonation(robloxUser, "TestUser", 10000, "Rp 10.000", "test");
+  
+  const top50 = Storage.getTop(50);
+  await sendToRoblox("SaweriaLeaderboard", { type: "UPDATE", top: top50 });
+  
+  const donatePayload = {
+    type: "SAWERIA",
+    donatorName: "TestUser",
+    robloxUsername: robloxUser,
+    pesan: "test",
+    amountRaw: 10000,
+    amountFormatted: "Rp 10.000",
+    tier: 1,
+    durationSec: 7,
+    effectColor: "RED",
+  };
+  await sendToRoblox("SaweriaDonatAlert", donatePayload);
+  
+  res.json({ success: true, sent: donatePayload, leaderboard: top50 });
+});
+
 app.listen(CONFIG.PORT, () => console.log(`[Server] Port ${CONFIG.PORT}`));
