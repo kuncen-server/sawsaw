@@ -90,7 +90,7 @@ app.post("/saweria", async (req, res) => {
 
   // Simpan ke leaderboard
   const donorRecord = Storage.addDonation(
-    robloxUser, donatorName, amountRaw, amtFormatted, pesan
+    robloxUser, robloxUser, amountRaw, amtFormatted, pesan
   );
 
   // Ambil top 50 terbaru
