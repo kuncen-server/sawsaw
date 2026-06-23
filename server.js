@@ -18,13 +18,14 @@ const CONFIG = {
   SAWERIA_TOKEN:      process.env.SAWERIA_TOKEN      || "ISI_TOKEN_SAWERIA_KAMU",
   ROBLOX_API_KEY:     process.env.ROBLOX_API_KEY     || "ISI_ROBLOX_OPEN_CLOUD_API_KEY",
   ROBLOX_UNIVERSE_ID: process.env.ROBLOX_UNIVERSE_ID || "ISI_UNIVERSE_ID_GAME_KAMU",
-  TOPIC:              "SaweriaдонатAlert",   // nama topic MessagingService
-  PORT:               process.env.PORT || 3000,
+  TOPIC_DONATE:       "SaweriaDonatAlert",
+  TOPIC_LEADERBOARD:   "SaweriaLeaderboard",
+  PORT:               process.env.PORT || 8080,
 };
 
 // =====================================================
 // VERIFIKASI SIGNATURE SAWERIA
-// Saweria mengirim header X-Saweria-MD5-Signature
+// Saweria mengirim header X-Saweria-MD5-SignatureF
 // =====================================================
 function verifySaweria(req) {
   const signature = req.headers["x-saweria-md5-signature"];
