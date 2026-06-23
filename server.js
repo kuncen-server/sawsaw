@@ -26,16 +26,27 @@ const CONFIG = {
 // ── Helpers ──────────────────────────────────────────
 
 function verifySaweria(req) {
-  return true; // TEMP: bypass untuk testing
-}
-
-function parseRobloxUsername(pesan, namaAnonim) {
-  if (!pesan) return namaAnonim || "Anonim";
-  const m1 = pesan.match(/roblox\s*:\s*(\S+)/i);
-  if (m1) return m1[1].trim();
-  const m2 = pesan.match(/#(\S+)/);
-  if (m2) return m2[1].trim();
-  return namaAnonim || "Anonim";
+  // Cek pakai Webhook Token langsung (cara Saweria yang baru)
+  const token = req.headers["x-webhook-token"] 
+    || req.headers["authorization"]
+    || req.headers["x-saweria-token"]
+    || "";
+  
+  if (token === CONFIG.SAWERIA_TOKEN) return true;
+  
+  // Cek signature MD5 lama
+  const signature = req.headers["x-saweria-md5-signature"];
+  if (signature) {
+    const timestamp = req.headers["x-saweria-timestamp"] || "";
+    const hash = crypto.createHash("md5")
+      .update(timestamp + CONFIG.SAWERIA_TOKEN)
+      .digest("hex");
+    if (hash === signature) return true;
+  }
+  
+  // Log semua headers untuk debug
+  console.log("[Webhook] Headers diterima:", JSON.stringify(req.headers));
+  return false;
 }
 
 function formatIDR(n) {
