@@ -66,7 +66,16 @@ async function sendToRoblox(topic, payload) {
     return false;
   }
 }
-
+function parseRobloxUsername(pesan, namaAnonim) {
+  if (!pesan) return namaAnonim || "Anonim";
+  const m1 = pesan.match(/roblox\s*:\s*(\S+)/i);
+  if (m1) return m1[1].trim();
+  const m2 = pesan.match(/^(\S+)\s*:/);
+  if (m2) return m2[1].trim();
+  const m3 = pesan.match(/#(\S+)/);
+  if (m3) return m3[1].trim();
+  return namaAnonim || "Anonim";
+}
 // ── Webhook Saweria ───────────────────────────────────
 
 app.post("/saweria", async (req, res) => {
