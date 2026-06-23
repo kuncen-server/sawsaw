@@ -28,11 +28,7 @@ const CONFIG = {
 function verifySaweria(req) {
   return true; // TEMP bypass
 }
-  // Log semua headers untuk debug
-  console.log("[Webhook] Headers diterima:", JSON.stringify(req.headers));
-  return false;
-}
-
+  
 function formatIDR(n) {
   return "Rp " + parseInt(n || 0).toLocaleString("id-ID");
 }
